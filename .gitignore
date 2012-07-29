@@ -8,7 +8,6 @@
 *.clw
 *.pdb
 *.obj
-*.exe
 *.pch
 *.vspscc
 *_i.c

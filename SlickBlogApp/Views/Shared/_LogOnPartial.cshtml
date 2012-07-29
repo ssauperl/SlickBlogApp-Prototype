@@ -1,0 +1,12 @@
+﻿@if(Request.IsAuthenticated) {
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user">
+                    </i> @User.Identity.Name <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Content("~/Account/ChangePassword")">Profile</a></li>
+        <li class="divider"></li>
+        <li><a href="/Account/LogOff">Sign Out</a></li>
+    </ul>
+}
+else {   
+    <a class="btn dropdown-toggle" href="@Url.Content("~/Account/LogOn")"><i class="icon-user"></i>Sign in</a>
+}

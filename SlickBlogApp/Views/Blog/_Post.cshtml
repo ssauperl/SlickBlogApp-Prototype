@@ -1,0 +1,11 @@
+﻿@model SlickBlogApp.Models.Post
+<div class="span12 sba-post">
+    <p><span class="label label-info">Posted by @Model.Author.Username, on @Model.PostDate</span></p>
+    <h2><a class="sba-title" href="@Url.Content("~/Blog/" + Model.Blog.Address + "/Details/" + Model.PostId)">@Model.Title</a></h2>
+    @MvcHtmlString.Create(Model.Content)
+    <br />
+    <br />
+    <p><a class="btn ajaxComments" id="@Model.PostId"href="@Url.Content("~/Blog/" + Model.Blog.Address + "/PostComments/" + Model.PostId)">
+        Comments »</a></p>
+    <div id="@MvcHtmlString.Create("AjaxCommentDiv" + Model.PostId)"></div>
+</div>

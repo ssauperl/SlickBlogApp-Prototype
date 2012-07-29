@@ -1,0 +1,11 @@
+﻿@model SlickBlogApp.ViewModels.DisComments
+@if(Request.IsAuthenticated){
+    @Html.Partial("_CommentEditor", Model.NewComment)
+}
+@foreach (var comment in Model.Comments)
+{
+    @Html.Partial("_Comment", comment)
+}
+<div id="@MvcHtmlString.Create("MoreCommentsDiv" + Model.NewComment.PostId)"></div>
+<p><a class="btn btn-mini ajaxMore" data-skip="1"  id="@Model.NewComment.PostId"href="@Url.Content("~/Blog/" + Model.NewComment.Address + "/MoreComments/" + Model.NewComment.PostId)">
+        Show more »</a></p>

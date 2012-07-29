@@ -1,0 +1,28 @@
+﻿table {
+    table-layout: fixed;
+}
+
+    table th, table td {
+        overflow: hidden;
+    }
+
+.sba-post {
+    margin-top: 30px;
+    padding: 18px 70px;
+    background-color: #EEE;
+    min-height: 150px;
+}
+.sba-area {
+    width: 70%;
+    min-height: 20px;
+}
+.sba-comment {
+    margin-left: 10px;
+}
+.sba-body {
+    padding-top: 36px;
+    padding-bottom: 36px;
+}
+.sba-title {
+    color: #000;
+}

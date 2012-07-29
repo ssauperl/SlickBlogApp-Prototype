@@ -1,0 +1,11 @@
+﻿@model SlickBlogApp.ViewModels.DisPost
+@{
+    Layout = "~/Views/Shared/_LayoutDisplay.cshtml";
+    ViewBag.Title = Model.Title;
+}
+<h1><a class="sba-title" href="@Url.Content("~/Blog/" + Model.Address + "/Index")">@Model.Title</a></h1>
+<section id="gridSystem">
+<div class="row">
+@Html.Partial("_Post", Model.Post)
+</div>
+</section>

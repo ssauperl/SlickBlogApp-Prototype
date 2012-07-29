@@ -1,0 +1,5 @@
+﻿@model SlickBlogApp.ViewModels.DisComments
+@foreach (var comment in Model.Comments)
+{
+    @Html.Partial("_Comment", comment)
+}

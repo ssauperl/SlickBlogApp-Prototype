@@ -1,0 +1,37 @@
+﻿@model IEnumerable<SlickBlogApp.Models.Blog>
+@using SlickBlogApp.Helpers
+<table class="table table-striped table-bordered">
+    <colgroup>
+        <col class="span1">
+        <col class="span7">
+    </colgroup>
+    <thead>
+        <tr>
+            <th style="width: 40%">My blogs</th>
+            <th style="width: 30%"></th>
+            <th style="width: 30%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.Count()>0){
+        foreach (var blog in Model)
+        {
+            <tr>
+                <td><a href="@Url.Content("~/Blog/" + blog.Address + "/Posts/all")">@blog.Title</a></td>
+                <td>@Html.PostCount(blog.BlogId) posts</td>
+                <td><a class="btn btn-mini btn-info" href="@Url.Content("~/Blog/" + blog.Address)">View
+                    blog</a> <a class="btn btn-mini btn" href="@Url.Content("~/Blog/" + blog.Address + "/PostEditor")">
+                        New post</a> <a class="btn btn-mini" href="@Url.Content("~/Blog/" + blog.Address + "/Settings")">
+                            <i class="icon-cog"></i>Settings </a></td>
+            </tr>
+        }
+        }
+        else{
+            <tr>
+                <td>No blogs yet</td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>

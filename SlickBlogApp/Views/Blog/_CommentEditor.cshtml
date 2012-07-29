@@ -1,0 +1,24 @@
+﻿@model SlickBlogApp.ViewModels.NewComment
+<div class="span12 sba-comment">
+    @using (Ajax.BeginForm("PublishComment", "Blog",
+            new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "AjaxCommentDiv" + +Model.PostId,
+                OnSuccess = "done"
+            },
+            new { id = Model.PostId }))
+    {
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="Comment">Comment</label>
+                @Html.TextAreaFor(p => p.Text, new { @class = "sba-area" })<br />
+                @Html.ValidationMessageFor(p => p.Text)
+                @Html.HiddenFor(p => p.PostId)<br />
+                <input class="btn btn-primary btn-mini" id="@Model.PostId" type="submit" value="Post">
+
+            </div>
+        </fieldset>
+    }
+</div>

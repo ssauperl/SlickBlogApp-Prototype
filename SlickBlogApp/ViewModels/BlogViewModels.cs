@@ -41,6 +41,10 @@ namespace SlickBlogApp.ViewModels
         [DataType(DataType.MultilineText)]
         [AllowHtml]
         public string Content { get; set; }
+        public HttpPostedFileBase file { get; set; }
+        //public byte[] FileData { get; set; }
+        public string FileName { get; set; }
+        //public string FileContentType { get; set; }
     }
     public class CpPosts
     {
@@ -54,6 +58,19 @@ namespace SlickBlogApp.ViewModels
         public string Scope { get; set; }
         public string Title { get; set; }
         public IEnumerable<Post> Posts { get; set; }
+    }
+    public class CpComments
+    {
+        [HiddenInput]
+        public int BlogId { get; set; }
+        [HiddenInput]
+        public String Address { get; set; }
+        [HiddenInput]
+        public int Pages { get; set; }
+        public int CurrentPage { get; set; }
+        public string Scope { get; set; }
+        public string Title { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
     }
     public class NewComment
     {

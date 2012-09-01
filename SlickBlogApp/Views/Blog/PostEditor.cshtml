@@ -1,68 +1,67 @@
 ﻿@model SlickBlogApp.ViewModels.EditPost
-           
 @section style {
-<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet"/>
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet"/>
 }
 @section scripts {
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-<script type="text/javascript" src="@Url.Content("~/Scripts/tinymce/tiny_mce.js")"></script>
-<script type="text/javascript">
-tinyMCE.init({
-        theme : "advanced",
-        mode: "textareas",
-        width: "100%",
-        height: "480"
-    });
-var $j = jQuery;
-$j('#Save').click(function () {
-    $(this).button('loading');
-    event.preventDefault();
-    tinyMCE.triggerSave();
-    $j.ajax({
-        url: '/Blog/@Model.Address/SavePost',
-        data: $j('#ajaxPost').serialize(),
-        type: 'POST',
-        datatype: 'text',
-        success: function (data) {
-            $j('#PostId').val(data);
-            $('#Save').button('reset');
-        }
-    });
-    
-});
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/tinymce/tiny_mce.js")"></script>
+    <script type="text/javascript">
+        tinyMCE.init({
+            theme: "advanced",
+            mode: "textareas",
+            width: "800px",
+            height: "400px"
+        });
+        var $j = jQuery;
+        $j('#Save').click(function () {
+            $(this).button('loading');
+            event.preventDefault();
+            tinyMCE.triggerSave();
+            $j.ajax({
+                url: '/Blog/@Model.Address/SavePost',
+                data: $j('#ajaxPost').serialize(),
+                type: 'POST',
+                datatype: 'text',
+                success: function (data) {
+                    $j('#PostId').val(data);
+                    $('#Save').button('reset');
+                }
+            });
 
-$j(document).ready(function () {
-    $j("#dialog-confirm").dialog({
-        resizable: false,
-        height: 140,
-        modal: true,
-        autoOpen: false,
-        draggable: false,
-        height: 'auto',
-        buttons: {
-            Continue: function () {
-                window.location.href = '/Blog/@Model.Address/Posts/all';
-            },
-            Cancel: function () {
-                $j(this).dialog("close");
-            }
-        }
-    });
-});
-$j('#Close').click(function () {
-    event.preventDefault();
-    $j('#dialog-confirm').dialog('open');
-});
-</script>
-       
+        });
+
+        $j(document).ready(function () {
+            $j("#dialog-confirm").dialog({
+                resizable: false,
+                height: 140,
+                modal: true,
+                autoOpen: false,
+                draggable: false,
+                height: 'auto',
+                buttons: {
+                    Continue: function () {
+                        window.location.href = '/Blog/@Model.Address/Posts/all';
+                    },
+                    Cancel: function () {
+                        $j(this).dialog("close");
+                    }
+                }
+            });
+        });
+        $j('#Close').click(function () {
+            event.preventDefault();
+            $j('#dialog-confirm').dialog('open');
+        });
+    </script>
+
 }
 @{
     ViewBag.Title = Model.Title;
     Layout = "~/Views/Shared/_LayoutCP.cshtml";
 }
 <h2>New post</h2>
-@using (Html.BeginForm("PublishPost", "Blog", FormMethod.Post, new { id = "ajaxPost" }))
+@using (Html.BeginForm("PublishPost", "Blog", FormMethod.Post, new { id = "ajaxPost", enctype = "multipart/form-data" }))
 {
     <fieldset>
         <div class="control-group">
@@ -72,18 +71,33 @@ $j('#Close').click(function () {
                 @Html.ValidationMessageFor(p => p.Title)
             </div>
             <br />
+            <label class="control-label" for="Title">File</label>
+            <div class="controls">
+                <input type="file" name="file" />
+            </div>
+            @if (Model.FileName!=null)
+            {
+            <div>
+            Currently uploaded file: @Model.FileName <br />
+            To upload different file use choose file button.  
+            </div>
+            }
+            <br />
+            <label class="control-label" for="Title">Text</label>
             <div class="controls">
                 @Html.TextAreaFor(p => p.Content, new { @class = "input-xlarge" })<br />
                 @Html.ValidationMessageFor(p => p.Content)
                 @Html.HiddenFor(p => p.BlogId)
                 @Html.HiddenFor(p => p.PostId)
+                @Html.HiddenFor(p => p.FileName)
             </div>
             <input class="btn btn-primary" type="submit" name="action:Publish" value="Publish" />
-            <button class="btn" data-loading-text="saving..." id="Save" >Save</button>
-            <button class="btn" id="Close" >Close</button>
+            <button class="btn" data-loading-text="saving..." id="Save">Save</button>
+            <button class="btn" id="Close">Close</button>
         </div>
     </fieldset>
 }
 <div id="dialog-confirm" title="Leave the editor?">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Unsaved changes will be lost.</p>
+    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Unsaved changes will be lost.</p>
 </div>

@@ -2,6 +2,23 @@
 <div class="span12 sba-post">
     <p><span class="label label-info">Posted by @Model.Author.Username, on @Model.PostDate</span></p>
     <h2><a class="sba-title" href="@Url.Content("~/Blog/" + Model.Blog.Address + "/Details/" + Model.PostId)">@Model.Title</a></h2>
+    <br />
+    @if (Model.FileName != null)
+    {
+        if(Model.FileContentType.Contains("image")){
+            <div>
+            <img src="@Url.Content("~/Blog/" + Model.Blog.Address + "/FileDownload/" + Model.PostId)" alt="@Model.FileName" />
+                </div>
+        }
+        else{
+        <div>
+            <a class="btn btn-primary" href="@Url.Content("~/Blog/" + Model.Blog.Address + "/FileDownload/" + Model.PostId)">
+                <i class="icon-download-alt"></i>  @Model.FileName</a>
+        </div>
+        }
+        <br />
+        <br />
+    }
     @MvcHtmlString.Create(Model.Content)
     <br />
     <br />

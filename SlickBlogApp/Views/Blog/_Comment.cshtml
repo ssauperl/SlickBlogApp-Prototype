@@ -3,5 +3,8 @@
     <div class="well sba-area">
         <p><span class="label">@Model.Author.Username, @Model.PostDate</span></p>
         <p>@Model.Text</p>
+        @if (User.Identity.Name.Equals(Model.Author.Username)){
+        <p><a class="btn btn-mini btn-danger" href="@Url.Content("~/Blog/"+Model.Post.Blog.Address+"/DeleteComment/"+Model.CommentId)">Delete</a></p>
+        }
     </div>
 </div>

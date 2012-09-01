@@ -18,6 +18,9 @@ namespace SlickBlogApp.Models
         public string Content { get; set; }
         public DateTime PostDate { get; set; }
         public bool Published { get; set; }
+        public byte[] File { get; set; }
+        public string FileName { get; set; }
+        public string FileContentType { get; set; }
         public virtual Blog Blog { get; set; }
         public virtual UserInfo Author { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }

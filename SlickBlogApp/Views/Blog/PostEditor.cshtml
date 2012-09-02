@@ -8,8 +8,9 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/tinymce/tiny_mce.js")"></script>
     <script type="text/javascript">
         tinyMCE.init({
-            theme: "advanced",
             mode: "textareas",
+            theme: "advanced",
+            editor_selector :"mceEditor",
             width: "800px",
             height: "400px"
         });
@@ -71,7 +72,7 @@
                 @Html.ValidationMessageFor(p => p.Title)
             </div>
             <br />
-            <label class="control-label" for="Title">File</label>
+            <label class="control-label" for="file">File</label>
             <div class="controls">
                 <input type="file" name="file" />
             </div>
@@ -83,13 +84,17 @@
             </div>
             }
             <br />
-            <label class="control-label" for="Title">Text</label>
+            <label class="control-label" for="Content">Text</label>
             <div class="controls">
-                @Html.TextAreaFor(p => p.Content, new { @class = "input-xlarge" })<br />
+                @Html.TextAreaFor(p => p.Content, new { @class = "input-xlarge, mceEditor" })<br />
                 @Html.ValidationMessageFor(p => p.Content)
                 @Html.HiddenFor(p => p.BlogId)
                 @Html.HiddenFor(p => p.PostId)
                 @Html.HiddenFor(p => p.FileName)
+            </div>
+            <label class="control-label" for="Tags">Tags</label>
+            <div>
+                @Html.TextAreaFor(p => p.Tags, new { @class = "input-xlarge" })
             </div>
             <input class="btn btn-primary" type="submit" name="action:Publish" value="Publish" />
             <button class="btn" data-loading-text="saving..." id="Save">Save</button>

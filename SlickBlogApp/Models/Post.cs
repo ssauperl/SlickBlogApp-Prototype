@@ -24,5 +24,6 @@ namespace SlickBlogApp.Models
         public virtual Blog Blog { get; set; }
         public virtual UserInfo Author { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

@@ -13,6 +13,6 @@ namespace SlickBlogApp.Models
         [MinLength(3)]
         [MaxLength(30)]
         public string TagName { get; set; }
-        public virtual ICollection<Blog> Blogs { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

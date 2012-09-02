@@ -123,6 +123,10 @@
     <Compile Include="Migrations\201209011502237_FileSupportNameAndContent.Designer.cs">
       <DependentUpon>201209011502237_FileSupportNameAndContent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201209021633101_TagsMovedToPost.cs" />
+    <Compile Include="Migrations\201209021633101_TagsMovedToPost.Designer.cs">
+      <DependentUpon>201209021633101_TagsMovedToPost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Blog.cs" />

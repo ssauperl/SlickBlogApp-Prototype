@@ -19,7 +19,7 @@ namespace SlickBlogApp.Models
         [MaxLength(30)]
         [StringLength(30, MinimumLength = 3)]
         public String Address { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
+        //public virtual ICollection<Tag> Tags { get; set; }
         //[ForeignKey("Owner")]
         //public int Owner_UserInfoId { get; set; }
         [Required]

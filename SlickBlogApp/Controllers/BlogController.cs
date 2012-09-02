@@ -10,6 +10,8 @@ using SlickBlogApp.ViewModels;
 using AutoMapper;
 using System.Data;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Text;
 //using Microsoft.Security.Application;
 
 namespace SlickBlogApp.Controllers
@@ -145,7 +147,7 @@ namespace SlickBlogApp.Controllers
             if (id != null)
             {
                 Post post = blog.Posts.Single(p => p.PostId == id);//needs check if post exists
-                Mapper.CreateMap<Post, EditPost>().ForMember(f => f.file, opt => opt.Ignore()); ;
+                Mapper.CreateMap<Post, EditPost>().ForMember(f => f.file, opt => opt.Ignore()).ForMember(f => f.Tags, opt => opt.Ignore()); ;
                 EditPost ep = Mapper.Map<Post, EditPost>(post);
                 //byte[] fileData;               
                 //string contentType;
@@ -163,6 +165,21 @@ namespace SlickBlogApp.Controllers
                     //ep.FileContentType = fileName;
 
                     ep.FileName = fileName;
+                }
+                if (post.Tags.Count != 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(post.Tags.First().TagName);
+                    if (post.Tags.Count > 1)
+                    {
+                        for (int i = 2; i < post.Tags.Count; i++)
+                        {
+                            sb.Append(",");
+                            sb.Append(post.Tags.ElementAt(i).TagName);
+                        }
+                    }
+                    ep.Tags = sb.ToString();
+
                 }
                 ep.PostId = post.PostId;
                 ep.BlogId = blog.BlogId;
@@ -228,6 +245,7 @@ namespace SlickBlogApp.Controllers
                 byte[] fileData = null;
                 string contentType = null;
                 string fileName = null;
+                
 
                 if (p.PostId != 0)
                 {
@@ -235,10 +253,16 @@ namespace SlickBlogApp.Controllers
                     fileData = pst.File;
                     contentType = pst.FileContentType;
                     fileName = pst.FileName;
+                    List<Tag> oldTagList = pst.Tags.ToList<Tag>();
+                    foreach (var item in oldTagList)
+                    {
+                        _db.Tags.Find(item.TagId).Posts.Remove(pst);
+                        _db.SaveChanges();
+                    }
                     pst = null;
                     _db = new SlickBlogAppContext();
                 }
-                Mapper.CreateMap<EditPost, Post>().ForMember(f => f.File, opt => opt.Ignore());
+                Mapper.CreateMap<EditPost, Post>().ForMember(f => f.File, opt => opt.Ignore()).ForMember(f=>f.Tags, opt=>opt.Ignore());
                 Post post = Mapper.Map<EditPost, Post>(p);
                 
                 Guid userGuid = (Guid)Membership.GetUser().ProviderUserKey;
@@ -256,12 +280,52 @@ namespace SlickBlogApp.Controllers
                         post.FileContentType = p.file.ContentType;
                     }
                 }
-                else if (p.PostId!=0&&p.FileName.Equals(fileName))
+                else if (p.PostId != 0 && p.FileName!=null)
                 {
-                    post.File = fileData;
-                    post.FileName = fileName;
-                    post.FileContentType = contentType;
+                    if (p.FileName.Equals(fileName))
+                    {
+                        post.File = fileData;
+                        post.FileName = fileName;
+                        post.FileContentType = contentType;
+                    }
                 }
+                if (p.Tags != null)
+                {
+                    //foreach (var item in oldTagList)
+                    //{
+                    //    _db.Tags.Find(item.TagId).Posts.Remove(post);
+                    //}
+                    List<Tag> tagList = new List<Tag>();
+                    post.Tags = tagList;
+                    String[] tags = Regex.Split(p.Tags, ",");
+                    foreach (var tag in tags)
+                    {
+                        Tag blogTag;
+                        try
+                        {
+                            blogTag = _db.Tags.Single(t => t.TagName.Equals(tag));
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            blogTag = new Tag();
+                            blogTag.TagName = tag;
+                            _db.Tags.Add(blogTag);
+
+                        }
+                        post.Tags.Add(blogTag);
+                    }
+                }
+                //else
+                //{
+                //    foreach (var item in oldTagList)
+                //    {
+                //        Tag tg =_db.Tags.Find(item.TagId);
+                //        tg.Posts.Remove(post);
+                //        _db.Entry(tg).State = EntityState.Modified;
+                //        _db.SaveChanges();
+                //    }
+                //}
+
                 post.Author = userInfo;
                 post.Blog = _db.Blogs.Find(p.BlogId);
                 post.Published = true;
@@ -320,11 +384,36 @@ namespace SlickBlogApp.Controllers
                         post.FileContentType = p.file.ContentType;
                     }
                 }
-                else if (p.PostId != 0 && p.FileName.Equals(fileName))
+                else if (p.PostId != 0 && p.FileName!=null)
                 {
-                    post.File = fileData;
-                    post.FileName = fileName;
-                    post.FileContentType = contentType;
+                    if (p.FileName.Equals(fileName))
+                    {
+                        post.File = fileData;
+                        post.FileName = fileName;
+                        post.FileContentType = contentType;
+                    }
+                }
+                if (p.Tags != null)
+                {
+                    List<Tag> tagList = new List<Tag>();
+                    post.Tags = tagList;
+                    String[] tags = Regex.Split(p.Tags, ",");
+                    foreach (var tag in tags)
+                    {
+                        Tag blogTag;
+                        try
+                        {
+                            blogTag = _db.Tags.Single(t => t.TagName.Equals(tag));
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            blogTag = new Tag();
+                            blogTag.TagName = tag;
+                            _db.Tags.Add(blogTag);
+
+                        }
+                        post.Tags.Add(blogTag);
+                    }
                 }
                 post.Author = userInfo;
                 post.Blog = _db.Blogs.Find(p.BlogId);

@@ -2,84 +2,124 @@
 @using SlickBlogApp.Helpers
 @{
     ViewBag.Title = Model.Title;
-    Layout = "~/Views/Shared/_LayoutCP.cshtml";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 @section style {
-<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet"/>
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet"/>
 }
 @section scripts {
-<script type="text/javascript">
-    var $j = jQuery;
-    $j("#dialog-confirm").dialog({
-        resizable: false,
-        height: 140,
-        modal: true,
-        autoOpen: false,
-        draggable: false,
-        height: 'auto',
-        buttons: {
-            Continue: function () {
-                var path = $(this).data('link').href; // Get the stored result
-                $(location).attr('href', path);
-                window.location.href = a.href;
-            },
-            Cancel: function () {
-                $j(this).dialog("close");
+    <script type="text/javascript">
+        var $j = jQuery;
+        $j("#dialog-confirm").dialog({
+            resizable: false,
+            height: 140,
+            modal: true,
+            autoOpen: false,
+            draggable: false,
+            height: 'auto',
+            buttons: {
+                Continue: function () {
+                    var path = $(this).data('link').href; // Get the stored result
+                    $(location).attr('href', path);
+                    window.location.href = a.href;
+                },
+                Cancel: function () {
+                    $j(this).dialog("close");
+                }
             }
-        }
-    });
-$j('.btn-danger').click(function () {
-    var a = this;
-    event.preventDefault();
-    $("#dialog-confirm")
-        .data('link', a)  // The important part .data() method
-        .dialog('open');
-    
-});
-</script>
+        });
+        $j('.dlt').click(function () {
+            var a = this;
+            event.preventDefault();
+            $("#dialog-confirm")
+                .data('link', a)  // The important part .data() method
+                .dialog('open');
+
+        });
+    </script>
 }
-<h2>@Model.Title</h2>
-<table class="table table-striped table-bordered">
-    <colgroup>
-        <col class="span1">
-        <col class="span7">
-    </colgroup>
-    <thead>
-        <tr>
-            <th style="width: 40%">Posts</th>
-            <th style="width: 40%"><a class="btn btn-primary" href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")">
-                New post</a></th>
-            <th style="width: 20%"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Posts.Count() > 0)
-        {
-            foreach (var post in Model.Posts)
+@section mainmenu {
+    <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Model.Title <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Index")">View</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")">Dashboard</a></li>
+        <li class="divider"></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")">New post</a></li>
+    </ul>
+</li>
+}
+<div class="span3 sidebar-nav well">
+    <!-- sidebar -->
+    <ul class="nav nav-list">
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")"><i class="icon-chevron-right"></i>New post</a></li>
+        <li class="active"><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")"><i class="icon-chevron-right"></i>Posts</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Comments")"><i class="icon-chevron-right"></i>Comments</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Settings")"><i class="icon-chevron-right"></i>Settings</a></li>
+
+    </ul>
+</div>
+<!-- /sidebar -->
+<div class="span8">
+    <!-- body -->
+    <h2>Posts - @Model.Title</h2>
+    <table class="table table-striped table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Post date</th>
+                <th>Views</th>
+                <th>Comments</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Posts.Count() > 0)
             {
-            <tr>
-                <td>@post.Title</td>
-                <td>
-                    @post.PostDate
-                </td>
-                <td><a class="btn btn-mini btn-info" href="@Url.Content("~/Blog/" + post.Blog.Address + "/Details/" + post.PostId)">
-                    View</a> <a class="btn btn-mini" href="@Url.Content("~/Blog/" + post.Blog.Address + "/PostEditor/" + post.PostId)">
-                        Edit</a> <a class="btn btn-mini btn-danger" href="@Url.Content("~/Blog/" + post.Blog.Address + "/DeletePost/" + post.PostId)">
-                        Delete</a></td>
-            </tr>
+                foreach (var post in Model.Posts)
+                {
+
+                <tr>
+                    <td>@post.Title</td>
+                    <td>@post.PostDate</td>
+                    <td>...</td>
+                    <td>@Html.PostCommentCount(post.PostId)</td>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Action
+   
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- dropdown menu links -->
+                                <li><a href="@Url.Content("~/Blog/" + post.Blog.Address + "/Details/" + post.PostId)">
+                                    View</a></li>
+                                <li><a href="@Url.Content("~/Blog/" + post.Blog.Address + "/PostEditor/" + post.PostId)">
+                                    Edit</a></li>
+                                <li><a class="dlt" href="@Url.Content("~/Blog/" + post.Blog.Address + "/DeletePost/" + post.PostId)">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                }
             }
-        }
-        else
-        {
-            <tr>
-                <td>No Posts yet</td>
-                <td></td>
-                <td></td>
-            </tr>
-        }
-    </tbody>
-</table>
-@Html.PostPaging(Model)
+            else
+            {
+                <tr>
+                    <td>No Posts yet</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.PostPaging(Model)
+</div>
 <div id="dialog-confirm" title="Delete post">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are you sure that you want to permanently delete selected post?</p>
+    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Are you sure that you want to permanently delete selected post?</p>
 </div>

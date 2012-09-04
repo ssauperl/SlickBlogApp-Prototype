@@ -540,6 +540,7 @@
     <Content Include="Views\Shared\_LayoutCP.cshtml" />
     <Content Include="Views\Shared\_LayoutDisplay.cshtml" />
     <Content Include="Views\Blog\Comments.cshtml" />
+    <Content Include="Views\Shared\_Layout2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -2,83 +2,125 @@
 @using SlickBlogApp.Helpers
 @{
     ViewBag.Title = Model.Title;
-    Layout = "~/Views/Shared/_LayoutCP.cshtml";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 @section style {
-<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet"/>
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet"/>
 }
 @section scripts {
-<script type="text/javascript">
-    var $j = jQuery;
-    $j("#dialog-confirm").dialog({
-        resizable: false,
-        height: 140,
-        modal: true,
-        autoOpen: false,
-        draggable: false,
-        height: 'auto',
-        buttons: {
-            Continue: function () {
-                var path = $(this).data('link').href; // Get the stored result
-                $(location).attr('href', path);
-                window.location.href = a.href;
-            },
-            Cancel: function () {
-                $j(this).dialog("close");
+    <script type="text/javascript">
+        var $j = jQuery;
+        $j("#dialog-confirm").dialog({
+            resizable: false,
+            height: 140,
+            modal: true,
+            autoOpen: false,
+            draggable: false,
+            height: 'auto',
+            buttons: {
+                Continue: function () {
+                    var path = $(this).data('link').href; // Get the stored result
+                    $(location).attr('href', path);
+                    window.location.href = a.href;
+                },
+                Cancel: function () {
+                    $j(this).dialog("close");
+                }
             }
-        }
-    });
-$j('.btn-danger').click(function () {
-    var a = this;
-    event.preventDefault();
-    $("#dialog-confirm")
-        .data('link', a)  // The important part .data() method
-        .dialog('open');
-    
-});
-</script>
+        });
+        $j('.dlt').click(function () {
+            var a = this;
+            event.preventDefault();
+            $("#dialog-confirm")
+                .data('link', a)  // The important part .data() method
+                .dialog('open');
+
+        });
+    </script>
 }
-<h2>@Model.Title</h2>
-<table class="table table-striped table-bordered">
-    <colgroup>
-        <col class="span1">
-        <col class="span7">
-    </colgroup>
-    <thead>
-        <tr>
-            <th style="width: 40%">Comments</th>
-            <th style="width: 40%">Post date</th>
-            <th style="width: 20%"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Comments.Count() > 0)
-        {
-            foreach (var comm in Model.Comments)
-            {
-            <tr>
-                <td>By @comm.Author.Username: @comm.Text
-                </td>
-                <td>
-                    @comm.PostDate
-                </td>
-                <td><a class="btn btn-mini btn-info" href="@Url.Content("~/Blog/" + Model.Address + "/Details/" + comm.Post.PostId)">
-                    View related post</a> <a class="btn btn-mini btn-danger" href="@Url.Content("~/Blog/" + Model.Address + "/DeleteComment/" + comm.CommentId)">
-                        Delete</a></td>
-            </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td>No Posts yet</td>
-                <td></td>
-                <td></td>
-            </tr>
-        }
-    </tbody>
-</table>
-@Html.CommentPaging(Model)
-<div id="dialog-confirm" title="Delete comment">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Are you sure that you want to permanently delete selected comment?</p>
+@section mainmenu {
+    <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Model.Title <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Index")">View</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")">Dashboard</a></li>
+        <li class="divider"></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")">New post</a></li>
+    </ul>
+</li>
+}
+<div class="span3 sidebar-nav well">
+    <!-- sidebar -->
+    <ul class="nav nav-list">
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")"><i class="icon-chevron-right">
+        </i>New post</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")">
+            <i class="icon-chevron-right"></i>Posts</a></li>
+        <li class="active"><a href="@Url.Content("~/Blog/" + Model.Address + "/Comments")"><i class="icon-chevron-right">
+        </i>Comments</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Settings")"><i class="icon-chevron-right">
+        </i>Settings</a></li>
+
+    </ul>
 </div>
+<!-- /sidebar -->
+<div class="span8">
+    <!-- body -->
+    <h2>Comments - @Model.Title</h2>
+    <table class="table table-striped table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Text</th>
+                <th>Post date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Comments.Count() > 0)
+            {
+                foreach (var comm in Model.Comments)
+                {
+
+                <tr>
+                    <td>@comm.Author.Username</td>
+                    <td>@comm.Text</td>
+                    <td>@comm.PostDate</td>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Action
+   
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- dropdown menu links -->
+                                <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Details/" + comm.Post.PostId)">
+                                    View related post</a></li>
+                                <li><a class="dlt" href="@Url.Content("~/Blog/" + Model.Address + "/DeleteComment/" + comm.CommentId)">
+                                    Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No Posts yet</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.CommentPaging(Model)
+</div>
+<!-- /body -->
+<div id="dialog-confirm" title="Delete comment">
+    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Are you sure that you want to permanently delete selected comment?</p>
+</div>
+

@@ -35,6 +35,8 @@ namespace SlickBlogApp.ViewModels
         public int BlogId { get; set; }
         [HiddenInput]
         public String Address { get; set; }
+        [HiddenInput]
+        public String BlogTitle { get; set; }
         [MaxLength(100)]
         [StringLength(100)]
         public string Title { get; set; }

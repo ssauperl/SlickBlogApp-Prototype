@@ -1,7 +1,59 @@
 ﻿@model SlickBlogApp.Models.Blog
 @{
     ViewBag.Title = Model.Title;
-    Layout = "~/Views/Shared/_LayoutCP.cshtml";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
-<h2>@Model.Title</h2>
-<p>Work in progress</p>
+@section mainmenu {
+    <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Model.Title <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Index")">View</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")">Dashboard</a></li>
+        <li class="divider"></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")">New post</a></li>
+    </ul>
+</li>
+}
+<div class="span3 sidebar-nav well">
+    <!-- sidebar -->
+    <ul class="nav nav-list">
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")"><i class="icon-chevron-right">
+        </i>New post</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")">
+            <i class="icon-chevron-right"></i>Posts</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Comments")"><i class="icon-chevron-right">
+        </i>Comments</a></li>
+        <li class="active"><a href="@Url.Content("~/Blog/" + Model.Address + "/Settings")"><i
+            class="icon-chevron-right"></i>Settings</a></li>
+
+    </ul>
+</div>
+<!-- /sidebar -->
+<div class="span8">
+    <!-- body -->
+    <h2>Settings - @Model.Title</h2>
+    <form class="form-horizontal" action="@Url.Content("~/Blog/" + Model.Address + "/Settings")" method="post">
+    <div class="form-actions">
+        <div class="control-group">
+            <label class="control-label">Blog title</label>
+            <div class="controls">
+                @*<input type="text" placeholder="Title" value="@Model.Title">*@
+                @Html.TextBoxFor(p => p.Title, new { placeholder="Title", value=Model.Title  })
+                @Html.ValidationMessageFor(p => p.Title)
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Blog address</label>
+            <div class="controls">
+                <input class="input-xlarge" id="disabledInput" type="text" placeholder="@Model.Address"
+                    disabled>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
+</div>
+</form>
+</div><!-- /body -->

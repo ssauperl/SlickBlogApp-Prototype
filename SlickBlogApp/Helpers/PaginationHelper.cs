@@ -99,6 +99,30 @@ namespace SlickBlogApp.Helpers
             }
             return MvcHtmlString.Create(count.ToString());
         }
+        public static MvcHtmlString TotalCommentCount(this HtmlHelper helper, int blogid)
+        {
+            SlickBlogAppContext _db = new SlickBlogAppContext();
+            //Blog blog = _db.Blogs.Find(blogid);
+            _db.Comments.Where(c=>c.Post.Blog.BlogId==blogid).Count();
+            int count = 0;
+            //if (blog.Posts != null)
+            //{
+            count = _db.Comments.Where(c => c.Post.Blog.BlogId == blogid).Count();
+            //}
+            return MvcHtmlString.Create(count.ToString());
+        }
+        public static MvcHtmlString PostCommentCount(this HtmlHelper helper, int postid)
+        {
+            SlickBlogAppContext _db = new SlickBlogAppContext();
+            //Blog blog = _db.Blogs.Find(blogid);
+            _db.Comments.Where(c => c.Post.PostId == postid).Count();
+            int count = 0;
+            //if (blog.Posts != null)
+            //{
+            count = _db.Comments.Where(c => c.Post.Blog.BlogId == postid).Count();
+            //}
+            return MvcHtmlString.Create(count.ToString());
+        }
         //public static MvcHtmlString PostPaging(this HtmlHelper helper, CpPosts cpost)
         //{
         //    StringBuilder sb = new StringBuilder();

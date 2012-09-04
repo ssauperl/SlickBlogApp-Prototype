@@ -138,6 +138,28 @@ namespace SlickBlogApp.Controllers
             return View(blog);
 
         }
+        [AuthorizeUser]
+        [HttpPost]
+        public ActionResult Settings(String address, string Title)
+        {
+            //fixes needed preview only
+            Blog blg = _db.Blogs.Single(b => b.Address == address);//needs check if blog exists
+
+            blg.Title = Title;
+            _db.Entry(blg).State = EntityState.Modified;
+            try
+            {
+                _db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                
+                return RedirectToAction("/Settings");
+            }
+            //return View(blg);
+            return RedirectToAction("/Settings");
+
+        }
 
         [AuthorizeUser]
         public ActionResult PostEditor(String address, int? id)
@@ -184,6 +206,7 @@ namespace SlickBlogApp.Controllers
                 ep.PostId = post.PostId;
                 ep.BlogId = blog.BlogId;
                 ep.Address = address;
+                ep.BlogTitle = blog.Title;
                 return View(ep);
             }
             else
@@ -191,6 +214,7 @@ namespace SlickBlogApp.Controllers
                 EditPost post = new EditPost();
                 post.BlogId = blog.BlogId;
                 post.Address = blog.Address;
+                post.BlogTitle = blog.Title;
                 return View(post);
             }
 

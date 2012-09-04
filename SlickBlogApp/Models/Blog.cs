@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace SlickBlogApp.Models
 {
@@ -26,6 +27,12 @@ namespace SlickBlogApp.Models
         public virtual UserInfo Owner { get; set; }
         public virtual ICollection<UserInfo> Authors { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
+        //[DataType(DataType.MultilineText)]
+        //[AllowHtml]
+        //public string CSS { get; set; }
+        //[DataType(DataType.MultilineText)]
+        //[AllowHtml]
+        //public string HTML { get; set; }
 
     }
 }

@@ -1,18 +1,18 @@
-﻿@model SlickBlogApp.ViewModels.EditPost
+﻿ @model SlickBlogApp.ViewModels.EditPost
 @section style {
     <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet"/>
 }
 @section scripts {
-    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    @*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
     <script type="text/javascript" src="@Url.Content("~/Scripts/tinymce/tiny_mce.js")"></script>
     <script type="text/javascript">
         tinyMCE.init({
             mode: "textareas",
             theme: "advanced",
-            editor_selector :"mceEditor",
-            width: "800px",
-            height: "400px"
+            editor_selector: "mceEditor",
+            width: "700px",
+            height: "350px"
         });
         var $j = jQuery;
         $j('#Save').click(function () {
@@ -57,52 +57,86 @@
     </script>
 
 }
+@section mainmenu {
+    <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Model.BlogTitle <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Index")">View</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")">Dashboard</a></li>
+        <li class="divider"></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")">New post</a></li>
+    </ul>
+</li>
+}
 @{
     ViewBag.Title = Model.Title;
-    Layout = "~/Views/Shared/_LayoutCP.cshtml";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
-<h2>New post</h2>
-@using (Html.BeginForm("PublishPost", "Blog", FormMethod.Post, new { id = "ajaxPost", enctype = "multipart/form-data" }))
-{
-    <fieldset>
-        <div class="control-group">
-            <label class="control-label" for="Title">Title</label>
-            <div class="controls">
-                @Html.TextBoxFor(p => p.Title, new { @class = "input-xlarge" })<br />
-                @Html.ValidationMessageFor(p => p.Title)
-            </div>
-            <br />
-            <label class="control-label" for="file">File</label>
-            <div class="controls">
-                <input type="file" name="file" />
-            </div>
-            @if (Model.FileName!=null)
-            {
-            <div>
-            Currently uploaded file: @Model.FileName <br />
-            To upload different file use choose file button.  
-            </div>
-            }
-            <br />
-            <label class="control-label" for="Content">Text</label>
-            <div class="controls">
-                @Html.TextAreaFor(p => p.Content, new { @class = "input-xlarge, mceEditor" })<br />
-                @Html.ValidationMessageFor(p => p.Content)
-                @Html.HiddenFor(p => p.BlogId)
-                @Html.HiddenFor(p => p.PostId)
-                @Html.HiddenFor(p => p.FileName)
-            </div>
-            <label class="control-label" for="Tags">Tags</label>
-            <div>
-                @Html.TextAreaFor(p => p.Tags, new { @class = "input-xlarge" })
-            </div>
-            <input class="btn btn-primary" type="submit" name="action:Publish" value="Publish" />
-            <button class="btn" data-loading-text="saving..." id="Save">Save</button>
-            <button class="btn" id="Close">Close</button>
-        </div>
-    </fieldset>
-}
-<div id="dialog-confirm" title="Leave the editor?">
-    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-        Unsaved changes will be lost.</p>
+<div class="span3 sidebar-nav well">
+    <!-- sidebar -->
+    <ul class="nav nav-list">
+        <li class="active"><a href="@Url.Content("~/Blog/" + Model.Address + "/PostEditor")"><i class="icon-chevron-right">
+        </i>New post</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Posts/all")">
+            <i class="icon-chevron-right"></i>Posts</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Comments")"><i class="icon-chevron-right">
+        </i>Comments</a></li>
+        <li><a href="@Url.Content("~/Blog/" + Model.Address + "/Settings")"><i
+            class="icon-chevron-right"></i>Settings</a></li>
+
+    </ul>
 </div>
+<!-- /sidebar -->
+<div class="span8">
+    <!-- body -->
+    <h2>Post Editor - @Model.BlogTitle</h2>
+    @using (Html.BeginForm("PublishPost", "Blog", FormMethod.Post, new { id = "ajaxPost", enctype = "multipart/form-data" }))
+    {
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="Title">Title</label>
+                <div class="controls">
+                    @Html.TextBoxFor(p => p.Title, new { @class = "input-xlarge" })<br />
+                    @Html.ValidationMessageFor(p => p.Title)
+                </div>
+                <br />
+                <label class="control-label" for="file">File</label>
+                <div class="controls">
+                    <input type="file" name="file" />
+                </div>
+                @if (Model.FileName != null)
+                {
+                    <div>
+                        Currently uploaded file: @Model.FileName
+                        <br />
+                        To upload different file use choose file button.  
+                    </div>
+                }
+                <br />
+                <label class="control-label" for="Content">Text</label>
+                <div class="controls">
+                    @Html.TextAreaFor(p => p.Content, new { @class = "input-xlarge, mceEditor" })<br />
+                    @Html.ValidationMessageFor(p => p.Content)
+                    @Html.HiddenFor(p => p.BlogId)
+                    @Html.HiddenFor(p => p.PostId)
+                    @Html.HiddenFor(p => p.FileName)
+                </div>
+                <label class="control-label" for="Tags">Tags</label>
+                <div>
+                    @Html.TextAreaFor(p => p.Tags, new { @class = "input-xlarge" })
+                </div>
+                <input class="btn btn-primary" type="submit" name="action:Publish" value="Publish" />
+                <button class="btn" data-loading-text="saving..." id="Save">Save</button>
+                <button class="btn" id="Close">Close</button>
+            </div>
+        </fieldset>
+    }
+    <div id="dialog-confirm" title="Leave the editor?">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Unsaved changes will be lost.
+        </p>
+    </div>
+</div>
+<!-- /body -->
